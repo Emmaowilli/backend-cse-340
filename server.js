@@ -1,43 +1,76 @@
-/* ************** 
-* This server.js file is the primary file of the 
-* application. It is used to control the project. 
-***************/
-/* ********* 
-* Require Statements 
-*********/
-const express = require("express")
-const expressLayouts = require("express-ejs-layouts")
-const env = require("dotenv").config()
-const app = express()
-const static = require("./routes/static")
+const express = require('express');
+const path = require('path');
+const staticRouter = require('./routes/static');
 
-/* ********* 
-* View Engine and Templates 
-*********/
-app.set("view engine", "ejs")
-app.use(expressLayouts)
-app.set("layout", "./layouts/layout") // not at views root
+const app = express();
+const PORT = process.env.PORT || 5500;
 
-/* ********* 
-* Routes 
-*********/
-app.use(static)
+// View Engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-// Index route
-app.get("/", function(req, res){
-  res.render("index", {title: "Home"})
-})
+// Static Files
+app.use('/', staticRouter);
 
-/* ********* 
-* Local Server Information 
-* Values from .env (environment) file 
-*********/
-const port = process.env.PORT
-const host = process.env.HOST
+// Index Route
+app.get('/', (req, res) => {
+  res.render('index', { title: 'Home' });
+});
 
-/* ********* 
-* Log statement to confirm server operation 
-*********/
-app.listen(port, () => {
-  console.log(`app listening on ${host}:${port}`)
-})
+// Navigation Routes (NOW WORKING)
+app.get('/custom', (req, res) => {
+  res.send(`
+    <style>
+      body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 2rem; }
+      h1 { text-align: center; color: #2c3e50; margin-top: 100px; }
+      p { text-align: center; margin-top: 1rem; }
+      a { color: #1abc9c; text-decoration: none; font-weight: bold; }
+    </style>
+    <h1>Custom Vehicles</h1>
+    <p><a href="/">← Back to Home</a></p>
+  `);
+});
+
+app.get('/sedan', (req, res) => {
+  res.send(`
+    <style>
+      body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 2rem; }
+      h1 { text-align: center; color: #2c3e50; margin-top: 100px; }
+      p { text-align: center; margin-top: 1rem; }
+      a { color: #1abc9c; text-decoration: none; font-weight: bold; }
+    </style>
+    <h1>Sedan Vehicles</h1>
+    <p><a href="/">← Back to Home</a></p>
+  `);
+});
+
+app.get('/suv', (req, res) => {
+  res.send(`
+    <style>
+      body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 2rem; }
+      h1 { text-align: center; color: #2c3e50; margin-top: 100px; }
+      p { text-align: center; margin-top: 1rem; }
+      a { color: #1abc9c; text-decoration: none; font-weight: bold; }
+    </style>
+    <h1>SUV Vehicles</h1>
+    <p><a href="/">← Back to Home</a></p>
+  `);
+});
+
+app.get('/truck', (req, res) => {
+  res.send(`
+    <style>
+      body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 2rem; }
+      h1 { text-align: center; color: #2c3e50; margin-top: 100px; }
+      p { text-align: center; margin-top: 1rem; }
+      a { color: #1abc9c; text-decoration: none; font-weight: bold; }
+    </style>
+    <h1>Truck Vehicles</h1>
+    <p><a href="/">← Back to Home</a></p>
+  `);
+});
+
+// Start Server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

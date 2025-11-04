@@ -1,1 +1,100 @@
-<h1>Emmanuel Owilli</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <div id="wrapper">
+      <%- include('partials/header') %>
+      <%- include('partials/navigation') %>
+
+      <main>
+        <h1>Welcome to CSE Motors!</h1>
+
+        <!-- HERO SECTION - SIDE BY SIDE -->
+        <section class="hero">
+          <div class="delorean-grid">
+            <div class="delorean-text">
+              <h2>DMC Delorean</h2>
+              <ul>
+                <li>3 Cup holders</li>
+                <li>Superman doors</li>
+                <li>Fuzzy dice!</li>
+              </ul>
+              <button class="cta-btn">
+                <img src="/images/site/own_today.png" alt="Own Today" class="btn-icon">
+                Own Today
+              </button>
+            </div>
+            <div class="delorean-image">
+              <img src="/images/vehicles/delorean.jpg" alt="DMC Delorean">
+            </div>
+          </div>
+        </section>
+
+        <!-- UPGRADES + REVIEWS -->
+        <div class="bottom-grid">
+          <section class="upgrades">
+            <h2>Delorean Upgrades</h2>
+            <div class="upgrade-grid">
+              <div>
+                <img src="/images/upgrades/flux-cap.png" alt="Flux Capacitor">
+                <p>Flux Capacitor</p>
+              </div>
+              <div>
+                <img src="/images/upgrades/flame.jpg" alt="Flame Decals">
+                <p>Flame Decals</p>
+              </div>
+              <div>
+                <img src="/images/upgrades/bumper_sticker.jpg" alt="Bumper Stickers">
+                <p>Bumper Stickers</p>
+              </div>
+              <div>
+                <img src="/images/upgrades/hub-cap.jpg" alt="Hub Caps">
+                <p>Hub Caps</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="reviews">
+            <h2>DMC Delorean Reviews</h2>
+            <ul>
+              <li>"So fast it’s almost like traveling in time." (4/5)</li>
+              <li>"Coolest ride on the road." (4/5)</li>
+              <li>"I’m feeling McFly!" (5/5)</li>
+              <li>"The most futuristic ride of our day." (4.5/5)</li>
+              <li>"80’s livin and I love it!" (5/5)</li>
+            </ul>
+          </section>
+        </div>
+
+        <!-- VEHICLE SHOWCASE -->
+        <section class="vehicle-showcase">
+          <h2>Explore Our Fleet</h2>
+          <div class="vehicle-grid">
+            <% 
+              const vehicles = [
+                'adventador-tn.jpg', 'adventador.jpg', 'aerocar-tn.jpg', 'aerocar.jpg',
+                'batmobile-tn.jpg', 'batmobile.jpg', 'camaro-tn.jpg', 'camaro.jpg',
+                'crwn-vic-tn.jpg', 'crwn-vic.jpg', 'delorean-tn.jpg', 'delorean.jpg',
+                'dog-car-tn.jpg', 'dog-car.jpg', 'escalade-tn.jpg', 'escalade.jpg',
+                'fire-truck-tn.jpg', 'fire-truck.jpg', 'hummer-tn.jpg', 'hummer.jpg',
+                'mechanic-tn.jpg', 'mechanic.jpg', 'model-t-tn.jpg', 'model-t.jpg',
+                'monster-truck-tn.jpg', 'monster-truck.jpg', 'mystery-van-tn.jpg',
+                'mystery-van.jpg', 'no-image-tn.png', 'no-image.png',
+                'survan-tn.jpg', 'survan.jpg', 'wrangler-tn.jpg', 'wrangler.jpg'
+              ];
+              vehicles.forEach(img => { 
+                const name = img.split('.')[0].split('-tn')[0].replace(/-/g, ' ').toUpperCase();
+            %>
+              <div class="vehicle-card">
+                <img src="/images/vehicles/<%= img %>" alt="<%= name %>">
+                <p><%= name %></p>
+              </div>
+            <% }) %>
+          </div>
+        </section>
+      </main>
+
+      <%- include('partials/footer') %>
+    </div>
+  </body>
+</html>
