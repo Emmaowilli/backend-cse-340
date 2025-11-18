@@ -253,3 +253,13 @@ footer {
   .bottom-grid { grid-template-columns: 1fr 1fr; }
   main > h1 { font-size: 2.2rem; }
 }
+
+/* public/css/styles.css – add at the bottom */
+.classification-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+.vehicle-card a { text-decoration: none; color: inherit; }
+.vehicle-card img { width: 100%; height: auto; border-radius: 8px; }
