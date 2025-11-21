@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Error</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <main class="error-container">
+    <h1>Error <%= typeof status !== "undefined" ? status : 500 %></h1>
+
+    <p class="notice">
+      <%= typeof message !== "undefined" ? message : "An unexpected error occurred." %>
+    </p>
+
+    <% if (typeof stack !== "undefined") { %>
+      <pre><%= stack %></pre>
+    <% } %>
+  </main>
+</body>
+</html>
+

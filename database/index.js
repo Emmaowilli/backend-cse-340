@@ -19,7 +19,7 @@ const localConfig = {
   user: process.env.PG_USER,
   host: process.env.PG_HOST,
   database: process.env.PG_DATABASE,
-  password: String(process.env.PG_PASSWORD || ""), // force string
+  password: String(process.env.PG_PASSWORD || ""), 
   port: process.env.PG_PORT || 5432,
 };
 
@@ -29,10 +29,10 @@ const renderConfig = {
   ssl: { rejectUnauthorized: false },
 };
 
-// Build final config
+// Create pool
 const pool = new Pool(isLocal ? localConfig : renderConfig);
 
-// query helper
+// Query helper
 async function query(text, params) {
   try {
     return await pool.query(text, params);
@@ -42,6 +42,8 @@ async function query(text, params) {
   }
 }
 
-module.exports = { pool, query };
-
-
+// REQUIRED EXPORTS
+module.exports = {
+  pool,
+  query,
+};
