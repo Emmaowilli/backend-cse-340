@@ -1,73 +1,100 @@
-const inventoryModel = require("../models/inventory-model");
+// controllers/inventoryController.js
+const invModel = require("../models/inventory-model");
 const utilities = require("../utilities");
 
 const invCont = {};
 
 /* ================================
-   Build Classification View
+   BUILD CLASSIFICATION VIEW
 ================================ */
-invCont.buildByClassificationId = async function (req, res, next) {
+invCont.buildByClassificationId = async function (req, res) {
   try {
-    const classificationId = parseInt(req.params.classificationId);
+    const classification_id = parseInt(req.params.classificationId);
 
-    const vehicles = await inventoryModel.getVehiclesByClassificationId(
-      classificationId
-    );
-
-    const nav = await utilities.getNav();
-
-    // If no vehicles found
-    if (!vehicles || vehicles.length === 0) {
-      return res.status(404).render("errors/error", {
-        title: "404 - Not Found",
-        message: "No vehicles found for this classification.",
-        nav,
+    if (isNaN(classification_id)) {
+      return res.status(400).render("errors/error", {
+        title: "Invalid Classification",
+        message: "Classification ID must be a number."
       });
     }
 
-    const className = vehicles[0].classification_name;
-    const grid = await utilities.buildClassificationGrid(vehicles);
+    const data = await invModel.getInventoryByClassificationId(classification_id);
 
+    // Build grid
+    const classificationGrid = utilities.buildClassificationGrid(data);
+
+    // Build nav
+    const nav = utilities.getNav(await invModel.getClassifications());
+
+    // Render page
     res.render("inventory/classification", {
-      title: `${className} Vehicles`,
+      title: "Vehicles",
       nav,
-      grid,
-      errors: null,
+      classificationGrid
     });
+
   } catch (error) {
-    next(error);
+    console.error("Inventory Controller Error:", error);
+
+    res.status(500).render("errors/error", {
+      title: "Server Error",
+      message: "Something went wrong loading the classification."
+    });
   }
 };
 
+
 /* ================================
-   Build Vehicle Detail View
+   BUILD VEHICLE DETAIL VIEW
 ================================ */
-invCont.buildDetail = async function (req, res, next) {
+invCont.buildDetail = async function (req, res) {
   try {
-    const invId = parseInt(req.params.inv_id);
+    const inv_id = parseInt(req.params.invId);
 
-    const vehicle = await inventoryModel.getVehicleById(invId);
-    const nav = await utilities.getNav();
-
-    if (!vehicle) {
-      return res.status(404).render("errors/error", {
-        title: "404 - Not Found",
-        message: "Vehicle not found.",
-        nav,
+    if (isNaN(inv_id)) {
+      return res.status(400).render("errors/error", {
+        title: "Invalid Vehicle",
+        message: "Vehicle ID must be numeric."
       });
     }
 
-    const detail = await utilities.buildDetailView(vehicle);
+    const vehicle = await invModel.getInventoryById(inv_id);
 
+    if (!vehicle) {
+      return res.status(404).render("errors/error", {
+        title: "Vehicle Not Found",
+        message: "No vehicle exists with this ID."
+      });
+    }
+
+    // Build vehicle HTML
+    const detailsHTML = utilities.buildVehicleDetailHTML(vehicle);
+
+    // Build nav
+    const nav = utilities.getNav(await invModel.getClassifications());
+
+    // Render page
     res.render("inventory/detail", {
       title: `${vehicle.inv_make} ${vehicle.inv_model}`,
       nav,
-      detail,
-      errors: null,
+      detailsHTML   // FIXED NAME
     });
+
   } catch (error) {
-    next(error);
+    console.error("Vehicle Detail Error:", error);
+
+    res.status(500).render("errors/error", {
+      title: "Server Error",
+      message: "Error loading vehicle details."
+    });
   }
 };
 
 module.exports = invCont;
+
+
+
+
+
+
+

@@ -1,10 +1,46 @@
-<%- include('../partials/head') %>
-<%- include('../partials/nav') %>
+<!-- views/inventory/detail.ejs -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title><%= title %> | CSE Motors</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    /* small inline styles for quick use - move to your CSS file */
+    .vehicle-detail-container {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+    .vehicle-image { flex: 1 1 420px; max-width: 650px; }
+    .vehicle-image img { width: 100%; height: auto; display:block; border-radius:4px; }
+    .vehicle-info { flex: 1 1 320px; min-width: 280px; }
+    .vehicle-title { font-size: 1.8rem; margin: 0 0 .5rem; }
+    .vehicle-price-mile { margin: .5rem 0; font-size:1.2rem; }
+    .price { color: #0a6d3a; font-weight: 700; margin-right: .5rem; }
+    .vehicle-specs ul { list-style: none; padding-left: 0; }
+    .vehicle-specs li { margin-bottom: .35rem; }
+    @media (max-width: 760px) {
+      .vehicle-detail-container { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  <%- include('../partials/navigation') %>
 
-<main class="detail-container">
-  <div class="container">
-    <%- vehicleHTML %>
-  </div>
-</main>
+  <main id="main-content">
+    <h1 class="sr-only"><%= title %></h1>
 
-<%- include('../partials/footer') %>
+    <div id="vehicleDetailWrapper">
+      <!-- detailHTML built by utilities; we trust it, so use unescaped -->
+      <%- detailsHTML %>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

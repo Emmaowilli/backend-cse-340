@@ -1,8 +1,24 @@
-<%- include('../partials/head') %>
-<%- include('../partials/nav') %>
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head') %>
+  <body>
+    <div id="wrapper">
 
-<main class="classification-page">
-  <h1><%= title %></h1>
-  <%- grid %>
-</main>
+      <%- include('../partials/header') %>
+      <%- include('../partials/navigation') %>
+
+      <main class="classification-page">
+        <h1><%= title %></h1>
+        <%- classificationGrid %>
+      </main>
+
+      <%- include('../partials/footer') %>
+
+    </div>
+  </body>
+</html>
+
+
+
+
 

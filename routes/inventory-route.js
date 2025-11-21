@@ -1,17 +1,9 @@
+// routes/inventoryRoute.js
 const express = require("express");
 const router = express.Router();
 const invController = require("../controllers/inventoryController");
 
-// Classification view
+// Route pattern required by Week 3
 router.get("/classification/:classificationId", invController.buildByClassificationId);
 
-// Detail view
-router.get("/detail/:invId", invController.buildDetail);
-
 module.exports = router;
-
-
-
-
-
-

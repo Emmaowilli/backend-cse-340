@@ -1,33 +1,41 @@
 // database/index.js
 const { Pool } = require("pg");
 
-// Load .env locally only
+// Load .env locally
 if (!process.env.DATABASE_URL) {
   require("dotenv").config();
 }
 
 /*
-  Render PostgreSQL requires SSL.
-  We force SSL unless we are on localhost explicitly.
+  Detect local environment.
 */
+const isLocal =
+  process.env.PG_HOST === "localhost" ||
+  process.env.PG_HOST === "127.0.0.1" ||
+  process.env.LOCAL === "true";
 
-const isLocalhost = process.env.LOCAL === "true";
+// Local DB config (NO SSL)
+const localConfig = {
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: String(process.env.PG_PASSWORD || ""), // force string
+  port: process.env.PG_PORT || 5432,
+};
 
-const pool = new Pool({
+// Render/PostgreSQL config (WITH SSL)
+const renderConfig = {
   connectionString: process.env.DATABASE_URL,
-  ssl: isLocalhost
-    ? false                   // local development only
-    : { rejectUnauthorized: false },  // Render
-  max: 10,
-  idleTimeoutMillis: 10000,
-  connectionTimeoutMillis: 5000,
-});
+  ssl: { rejectUnauthorized: false },
+};
 
-// Helper query method for logging
+// Build final config
+const pool = new Pool(isLocal ? localConfig : renderConfig);
+
+// query helper
 async function query(text, params) {
   try {
-    const result = await pool.query(text, params);
-    return result;
+    return await pool.query(text, params);
   } catch (err) {
     console.error("DB ERROR:", err);
     throw err;
@@ -35,3 +43,5 @@ async function query(text, params) {
 }
 
 module.exports = { pool, query };
+
+
