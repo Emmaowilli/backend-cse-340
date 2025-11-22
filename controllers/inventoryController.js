@@ -18,17 +18,17 @@ invCont.buildByClassificationId = async function (req, res) {
       });
     }
 
-    const data = await invModel.getInventoryByClassificationId(classification_id);
+    const vehicles = await invModel.getInventoryByClassificationId(classification_id);
 
     // Build grid
-    const classificationGrid = utilities.buildClassificationGrid(data);
+    const classificationGrid = utilities.buildClassificationGrid(vehicles);
 
     // Build nav
     const nav = utilities.getNav(await invModel.getClassifications());
 
     // Render page
     res.render("inventory/classification", {
-      title: "Vehicles",
+      title: "Available Vehicles",
       nav,
       classificationGrid
     });
@@ -58,7 +58,8 @@ invCont.buildDetail = async function (req, res) {
       });
     }
 
-    const vehicle = await invModel.getInventoryById(inv_id);
+    // ✔ FIXED — correct function name
+    const vehicle = await invModel.getVehicleById(inv_id);
 
     if (!vehicle) {
       return res.status(404).render("errors/error", {
@@ -77,7 +78,7 @@ invCont.buildDetail = async function (req, res) {
     res.render("inventory/detail", {
       title: `${vehicle.inv_make} ${vehicle.inv_model}`,
       nav,
-      detailsHTML   // FIXED NAME
+      detailsHTML
     });
 
   } catch (error) {
@@ -91,6 +92,7 @@ invCont.buildDetail = async function (req, res) {
 };
 
 module.exports = invCont;
+
 
 
 

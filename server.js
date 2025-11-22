@@ -19,7 +19,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(async (req, res, next) => {
   try {
     const data = await invModel.getClassifications();
-    res.locals.nav = utilities.getNav(data.rows);
+    res.locals.nav = utilities.getNav(data);
     next();
   } catch (err) {
     next(err);

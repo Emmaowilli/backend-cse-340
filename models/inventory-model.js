@@ -51,8 +51,7 @@ async function getInventoryByClassificationId(classification_id) {
 }
 
 /**
- * Get single vehicle by inventory ID  
- * Controller calls this as: getVehicleById()
+ * Get a single vehicle by inv_id
  */
 async function getVehicleById(invId) {
   try {
@@ -74,9 +73,3 @@ module.exports = {
   getInventoryByClassificationId,
   getVehicleById
 };
-
-
-
-
-
-
