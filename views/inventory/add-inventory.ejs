@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head', { title: "Add Inventory" }) %>
+
+  <body>
+    <div id="wrapper">
+
+      <%- include('../partials/header') %>
+      <%- include('../partials/navigation') %>
+
+      <main>
+        <h1>Add New Vehicle</h1>
+
+        <% if (message) { %>
+          <p class="notice"><%= message %></p>
+        <% } %>
+
+        <form action="/inv/add-inventory" method="post" novalidate>
+
+          <label for="inv_make">Make</label>
+          <input 
+            type="text" 
+            id="inv_make" 
+            name="inv_make" 
+            required
+            maxlength="500"
+            value="<%= formData.inv_make || '' %>"
+          >
+
+          <label for="inv_model">Model</label>
+          <input 
+            type="text" 
+            id="inv_model" 
+            name="inv_model" 
+            required
+            maxlength="500"
+            value="<%= formData.inv_model || '' %>"
+          >
+
+          <label for="inv_year">Year (4 digits)</label>
+          <input 
+            type="number" 
+            id="inv_year" 
+            name="inv_year" 
+            required
+            min="1900" 
+            max="2099"
+            value="<%= formData.inv_year || '' %>"
+          >
+
+          <label for="inv_color">Color</label>
+          <input 
+            type="text" 
+            id="inv_color" 
+            name="inv_color" 
+            required
+            maxlength="30"
+            value="<%= formData.inv_color || '' %>"
+          >
+
+          <label for="inv_description">Description</label>
+          <textarea 
+            id="inv_description" 
+            name="inv_description" 
+            required
+          ><%= formData.inv_description || '' %></textarea>
+
+          <label for="inv_image">Image Path</label>
+          <input 
+            type="text" 
+            id="inv_image" 
+            name="inv_image"
+            maxlength="500"
+            placeholder="/images/vehicles/no-image.png"
+            value="<%= formData.inv_image || '' %>"
+          >
+
+          <label for="inv_thumbnail">Thumbnail Path</label>
+          <input 
+            type="text" 
+            id="inv_thumbnail" 
+            name="inv_thumbnail"
+            maxlength="500"
+            placeholder="/images/vehicles/no-image-tn.png"
+            value="<%= formData.inv_thumbnail || '' %>"
+          >
+
+          <label for="inv_price">Price</label>
+          <input 
+            type="number" 
+            id="inv_price" 
+            name="inv_price" 
+            required
+            step="0.01"
+            value="<%= formData.inv_price || '' %>"
+          >
+
+          <label for="inv_miles">Miles</label>
+          <input 
+            type="number" 
+            id="inv_miles" 
+            name="inv_miles" 
+            required
+            value="<%= formData.inv_miles || '' %>"
+          >
+
+          <label for="classification_id">Classification</label>
+          <select id="classification_id" name="classification_id" required>
+            <option value="">Choose a Classification</option>
+
+            <% if (classifications && classifications.length) { %>
+              <% classifications.forEach(c => { %>
+                <option 
+                  value="<%= c.classification_id %>"
+                  <%= (String(formData.classification_id) === String(c.classification_id))
+                        ? "selected" 
+                        : "" 
+                  %>
+                >
+                  <%= c.classification_name %>
+                </option>
+              <% }) %>
+            <% } %>
+          </select>
+
+          <button type="submit">Add Vehicle</button>
+
+        </form>
+      </main>
+
+      <%- include('../partials/footer') %>
+    </div>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+

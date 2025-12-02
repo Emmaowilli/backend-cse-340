@@ -9,3 +9,6 @@ router.use("/js", express.static(path.join(__dirname, "../public/js")));
 router.use("/images", express.static(path.join(__dirname, "../public/images")));
 
 module.exports = router;
+router.get("/error", (req, res, next) => {
+  next(new Error("This is a forced error."))
+})

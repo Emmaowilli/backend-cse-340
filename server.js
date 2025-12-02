@@ -1,5 +1,8 @@
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
+const flash = require('connect-flash');
+
 const staticRouter = require('./routes/static');
 const inventoryRouter = require('./routes/inventory');
 const errorRouter = require('./routes/error');
@@ -15,6 +18,29 @@ const PORT = process.env.PORT || 5500;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// === BODY PARSING (THIS WAS MISSING — MAIN FIX) ===
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// === SESSION MIDDLEWARE ===
+app.use(
+  session({
+    secret: 'superSecretKey',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// === FLASH MIDDLEWARE ===
+app.use(flash());
+
+// === Make flash messages available in all views ===
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
+
 // === GLOBAL NAV MIDDLEWARE ===
 app.use(async (req, res, next) => {
   try {
@@ -26,13 +52,13 @@ app.use(async (req, res, next) => {
   }
 });
 
-// Static Files
+// === STATIC FILES ===
 app.use('/', staticRouter);
 
-// Inventory Routes
+// === INVENTORY ROUTES ===
 app.use('/inv', inventoryRouter);
 
-// Error Trigger Route
+// === ERROR TRIGGER ROUTES ===
 app.use('/', errorRouter);
 
 // === HOME PAGE ===
@@ -40,10 +66,7 @@ app.get('/', (req, res) => {
   res.render('index', { title: 'Home', nav: res.locals.nav });
 });
 
-// === REMOVE OLD HARDCODED NAVIGATION ROUTES ===
-// They are no longer used because nav is now dynamic.
-
-// === 404 Handler ===
+// === 404 HANDLER ===
 app.use((req, res, next) => {
   next({ status: 404, message: 'Page not found' });
 });
@@ -69,3 +92,9 @@ app.listen(PORT, () => {
     console.log('Deployed on Render: https://your-project.onrender.com');
   }
 });
+
+
+
+
+
+

@@ -1,0 +1,32 @@
+<!-- views/inventory/management.ejs -->
+<%- include("../partials/head", { title: "Vehicle Management" }) %>
+
+<body>
+  <div id="wrapper">
+
+    <%- include("../partials/header") %>
+    <%- include("../partials/navigation") %>
+
+    <main>
+      <h1>Vehicle Management</h1>
+
+      <!-- SAFE message block -->
+      <% if (locals.message) { %>
+        <p class="notice"><%= locals.message %></p>
+      <% } %>
+
+      <ul>
+        <li><a href="/inv/add-classification">Add New Classification</a></li>
+        <li><a href="/inv/add-inventory">Add New Inventory</a></li>
+      </ul>
+
+      <!-- TEMPORARY DEBUG LINK -->
+      <a href="/trigger-error" class="footer-error">Trigger Footer Error</a>
+    </main>
+
+    <%- include("../partials/footer") %>
+  </div>
+</body>
+
+
+

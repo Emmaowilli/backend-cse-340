@@ -1,31 +1,41 @@
 // utilities/index.js
 
-// Format USD currency
+// ------------------ FORMATTERS ------------------
+
 function formatUSD(amount) {
   const num = Number(amount) || 0;
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD"
+    currency: "USD",
   }).format(num);
 }
 
-// Format number with commas
 function formatNumber(value) {
   const num = Number(value) || 0;
   return new Intl.NumberFormat("en-US").format(num);
 }
+
+// ------------------ NAVIGATION ------------------
 
 /**
  * Build navigation bar HTML
  */
 function getNav(classData) {
   let nav = `<ul class="navigation">`;
+
+  // Home link
   nav += `<li><a href="/" title="Home page">Home</a></li>`;
 
+  // Add classifications  
   if (classData && classData.length) {
-    classData.forEach(row => {
-      // ✅ FIXED route here
-      nav += `<li><a href="/inv/classification/${row.classification_id}" title="See our inventory of ${row.classification_name} vehicles">${row.classification_name}</a></li>`;
+    classData.forEach((row) => {
+      nav += `
+        <li>
+          <a href="/inv/type/${row.classification_id}"
+             title="See our inventory of ${row.classification_name}">
+            ${row.classification_name}
+          </a>
+        </li>`;
     });
   }
 
@@ -33,41 +43,40 @@ function getNav(classData) {
   return nav;
 }
 
-/**
- * Build classification grid HTML
- */
+// ------------------ CLASSIFICATION GRID ------------------
+
 function buildClassificationGrid(data) {
   if (!data || data.length === 0) {
-    return '<p class="notice">Sorry, no matching vehicles could be found.</p>';
+    return `<p class="notice">Sorry, no matching vehicles could be found.</p>`;
   }
 
-  let grid = '<ul class="inv-display">';
+  let grid = `<ul class="inv-display">`;
 
-  data.forEach(vehicle => {
+  data.forEach((vehicle) => {
     grid += `
       <li>
         <a href="/inv/detail/${vehicle.inv_id}">
-          <img src="${vehicle.inv_thumbnail}" alt="${vehicle.inv_make} ${vehicle.inv_model}">
+          <img src="${vehicle.inv_thumbnail}"
+               alt="${vehicle.inv_make} ${vehicle.inv_model}">
         </a>
+
         <div class="namePrice">
           <h2>
             <a href="/inv/detail/${vehicle.inv_id}">
               ${vehicle.inv_make} ${vehicle.inv_model}
             </a>
           </h2>
-          <span>$${new Intl.NumberFormat().format(vehicle.inv_price)}</span>
+          <span>${formatUSD(vehicle.inv_price)}</span>
         </div>
-      </li>
-    `;
+      </li>`;
   });
 
-  grid += "</ul>";
+  grid += `</ul>`;
   return grid;
 }
 
-/**
- * Build vehicle detail HTML
- */
+// ------------------ VEHICLE DETAIL PAGE ------------------
+
 function buildVehicleDetailHTML(vehicle) {
   if (!vehicle) return "<p>Vehicle data not available.</p>";
 
@@ -88,6 +97,7 @@ function buildVehicleDetailHTML(vehicle) {
 
       <div class="vehicle-info">
         <h1 class="vehicle-title">${make} ${model} ${year}</h1>
+
         <div class="vehicle-price-mile">
           <span class="price">${price}</span>
           <span class="mileage">| ${miles} miles</span>
@@ -115,9 +125,8 @@ function buildVehicleDetailHTML(vehicle) {
   `;
 }
 
-/**
- * Error handling wrapper
- */
+// ------------------ ERROR WRAPPER ------------------
+
 function handleErrors(fn) {
   return function (req, res, next) {
     Promise.resolve(fn(req, res, next)).catch(next);
@@ -130,7 +139,8 @@ module.exports = {
   getNav,
   buildClassificationGrid,
   buildVehicleDetailHTML,
-  handleErrors
+  handleErrors,
 };
+
 
 
