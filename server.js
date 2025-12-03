@@ -2,23 +2,33 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const flash = require('connect-flash');
+const cookieParser = require("cookie-parser");
 
 const staticRouter = require('./routes/static');
 const inventoryRouter = require('./routes/inventory');
+const accountRoute = require("./routes/accountRoute");
 const errorRouter = require('./routes/error');
+
 const utilities = require('./utilities');
 const invModel = require('./models/inventory-model');
+const authUtil = require("./utilities/auth");
 
 const app = express();
 
-// === CRITICAL: Use Render's PORT or fallback to 5500 ===
+// === PORT ===
 const PORT = process.env.PORT || 5500;
 
-// View Engine
+// === COOKIE PARSER ===
+app.use(cookieParser());
+
+// === AUTH CHECK (Must come BEFORE routes) ===
+app.use(authUtil.checkAuth);
+
+// === View Engine ===
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// === BODY PARSING (THIS WAS MISSING — MAIN FIX) ===
+// === BODY PARSING ===
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -34,7 +44,7 @@ app.use(
 // === FLASH MIDDLEWARE ===
 app.use(flash());
 
-// === Make flash messages available in all views ===
+// === FLASH → RES.LOCALS ===
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
@@ -52,26 +62,37 @@ app.use(async (req, res, next) => {
   }
 });
 
-// === STATIC FILES ===
+// ======================================
+//              ROUTES
+// ======================================
+
+// STATIC FILES
 app.use('/', staticRouter);
 
-// === INVENTORY ROUTES ===
+// INVENTORY ROUTES
 app.use('/inv', inventoryRouter);
 
-// === ERROR TRIGGER ROUTES ===
-app.use('/', errorRouter);
+// ACCOUNT ROUTES (put BEFORE errorRouter)
+app.use('/account', accountRoute);
 
-// === HOME PAGE ===
+// HOME PAGE
 app.get('/', (req, res) => {
   res.render('index', { title: 'Home', nav: res.locals.nav });
 });
 
-// === 404 HANDLER ===
+// ERROR TEST ROUTE (Keep AFTER functional routes)
+app.use('/', errorRouter);
+
+// ======================================
+//              ERROR HANDLING
+// ======================================
+
+// 404
 app.use((req, res, next) => {
   next({ status: 404, message: 'Page not found' });
 });
 
-// === GLOBAL ERROR HANDLER ===
+// GLOBAL ERROR HANDLER
 app.use((err, req, res, next) => {
   const status = err.status || 500;
   const message = err.message || 'Server Error';
@@ -85,12 +106,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-// === START SERVER ===
+// START SERVER
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-  if (process.env.PORT) {
-    console.log('Deployed on Render: https://your-project.onrender.com');
-  }
 });
 
 

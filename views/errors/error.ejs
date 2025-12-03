@@ -1,22 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Error</title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <main class="error-container">
-    <h1>Error <%= typeof status !== "undefined" ? status : 500 %></h1>
+const express = require("express");
+const router = express.Router();
 
-    <p class="notice">
-      <%= typeof message !== "undefined" ? message : "An unexpected error occurred." %>
-    </p>
+// === Error Test Route ===
+router.get("/cause-error", (req, res, next) => {
+  const err = new Error("Intentional 500 error for testing.");
+  err.status = 500;
+  next(err);
+});
 
-    <% if (typeof stack !== "undefined") { %>
-      <pre><%= stack %></pre>
-    <% } %>
-  </main>
-</body>
-</html>
+module.exports = router;
+
 

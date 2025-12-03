@@ -1,0 +1,35 @@
+<%- include("../partials/head", { title: "Login" }) %>
+
+<body>
+  <div id="wrapper">
+    <%- include("../partials/header") %>
+    <%- include("../partials/navigation", { nav }) %>
+
+    <main>
+      <h1>Login</h1>
+
+      <% if (errors && errors.length) { %>
+        <ul class="errors">
+          <% errors.forEach(function(err){ %>
+            <li><%= err.msg %></li>
+          <% }); %>
+        </ul>
+      <% } %>
+       
+      <form action="/account/login" method="post" novalidate>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required value="<%= email || '' %>">
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required>
+
+        <button type="submit">Login</button>
+      </form>
+    </main>
+
+    <%- include("../partials/footer") %>
+  </div>
+</body>
+
+
+

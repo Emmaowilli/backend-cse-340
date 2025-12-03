@@ -134,6 +134,7 @@ function handleErrors(fn) {
 }
 
 module.exports = {
+  getNav,
   formatUSD,
   formatNumber,
   getNav,

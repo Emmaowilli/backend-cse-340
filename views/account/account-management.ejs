@@ -1,0 +1,26 @@
+<%- include("../partials/head", { title: "Account Management" }) %>
+
+<body>
+  <div id="wrapper">
+    <%- include("../partials/header") %>
+    <%- include("../partials/navigation", { nav }) %>
+
+    <main>
+      <h1>Account Management</h1>
+
+      <% if (message) { %>
+        <p class="notice"><%= message %></p>
+      <% } %>
+
+      <h2>Welcome <%= account.account_firstname %></h2>
+
+      <p><a href="/account/update">Edit Account Information</a></p>
+      <p><a href="/inv/">Manage Inventory</a></p>
+      <p><a href="/account/logout">Logout</a></p>
+    </main>
+
+    <%- include("../partials/footer") %>
+  </div>
+</body>
+
+
