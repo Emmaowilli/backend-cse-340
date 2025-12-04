@@ -36,7 +36,7 @@ const checkRegData = async (req, res, next) => {
 
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav()
-    return res.render("account/register", {
+    return res.render("account/registration", {
       title: "Registration",
       nav,
       errors: errors.array(),
