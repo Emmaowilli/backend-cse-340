@@ -1,11 +1,5 @@
-// models/inventory-model.js
 const pool = require("../database/");
 
-/**
- * ==========================================
- * GET ALL CLASSIFICATIONS (correct ordering)
- * ==========================================
- */
 async function getClassifications() {
   try {
     const sql = `
@@ -21,9 +15,6 @@ async function getClassifications() {
   }
 }
 
-/**
- * Get classification record by ID
- */
 async function getClassificationById(classification_id) {
   try {
     const sql = `
@@ -39,9 +30,6 @@ async function getClassificationById(classification_id) {
   }
 }
 
-/**
- * Get all vehicles in a classification
- */
 async function getInventoryByClassificationId(classification_id) {
   try {
     const sql = `
@@ -58,9 +46,6 @@ async function getInventoryByClassificationId(classification_id) {
   }
 }
 
-/**
- * Get a single vehicle by ID
- */
 async function getVehicleById(invId) {
   try {
     const sql = `
@@ -76,11 +61,6 @@ async function getVehicleById(invId) {
   }
 }
 
-/**
- * ==========================================
- * ADD NEW CLASSIFICATION
- * ==========================================
- */
 async function addClassification(classification_name) {
   try {
     const sql = `
@@ -96,11 +76,6 @@ async function addClassification(classification_name) {
   }
 }
 
-/**
- * ==========================================
- * ADD NEW INVENTORY VEHICLE (FIXED)
- * ==========================================
- */
 async function addInventory(
   inv_make,
   inv_model,
@@ -143,11 +118,6 @@ async function addInventory(
   }
 }
 
-/**
- * ==========================================
- * EXPORT ALL FUNCTIONS
- * ==========================================
- */
 module.exports = {
   getClassifications,
   getClassificationById,

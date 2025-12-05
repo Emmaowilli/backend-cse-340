@@ -1,5 +1,3 @@
-// controllers/accountController.js
-
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -10,17 +8,11 @@ const utilities = require("../utilities");
 
 const accountController = {};
 
-/**************************************
- * Load Navigation
- **************************************/
 async function loadNav() {
   const classData = await invModel.getClassifications();
   return utilities.getNav(classData);
 }
 
-/**************************************
- * LOGIN VIEW
- **************************************/
 accountController.buildLogin = async (req, res) => {
   const nav = await loadNav();
   res.render("account/login", {
@@ -31,10 +23,6 @@ accountController.buildLogin = async (req, res) => {
     email: ""
   });
 };
-
-/**************************************
- * REGISTER VIEW
- **************************************/
 accountController.buildRegister = async (req, res) => {
   const nav = await loadNav();
   res.render("account/registration", {
@@ -48,9 +36,6 @@ accountController.buildRegister = async (req, res) => {
   });
 };
 
-/**************************************
- * REGISTER ACCOUNT
- **************************************/
 accountController.registerAccount = async (req, res) => {
   try {
     const nav = await loadNav();
@@ -82,10 +67,6 @@ accountController.registerAccount = async (req, res) => {
     console.error("Register Error:", error);
   }
 };
-
-/**************************************
- * LOGIN ACCOUNT
- **************************************/
 accountController.loginAccount = async (req, res) => {
   try {
     const nav = await loadNav();
@@ -117,8 +98,6 @@ accountController.loginAccount = async (req, res) => {
         email
       });
     }
-
-    // Store user in session
     req.session.accountData = {
       account_id: accountData.account_id,
       account_firstname: accountData.account_firstname,
@@ -126,8 +105,6 @@ accountController.loginAccount = async (req, res) => {
       account_email: accountData.account_email,
       account_type: accountData.account_type
     };
-
-    // Issue JWT
     const token = jwt.sign(req.session.accountData, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: "1h",
     });
@@ -145,9 +122,6 @@ accountController.loginAccount = async (req, res) => {
   }
 };
 
-/**************************************
- * ACCOUNT MANAGEMENT PAGE
- **************************************/
 accountController.buildAccountManagement = async (req, res) => {
   const nav = await loadNav();
   const account = req.session.accountData || null;
@@ -161,9 +135,6 @@ accountController.buildAccountManagement = async (req, res) => {
   });
 };
 
-/**************************************
- * EDIT ACCOUNT VIEW
- **************************************/
 accountController.buildUpdateAccount = async (req, res) => {
   const nav = await loadNav();
   const account = req.session.accountData;
@@ -180,10 +151,6 @@ accountController.buildUpdateAccount = async (req, res) => {
     message: null
   });
 };
-
-/**************************************
- * UPDATE ACCOUNT PROCESS
- **************************************/
 accountController.updateAccount = async (req, res) => {
   const nav = await loadNav();
   const { account_id, firstname, lastname, email } = req.body;
@@ -204,8 +171,6 @@ accountController.updateAccount = async (req, res) => {
       errors: null
     });
   }
-
-  // Update session details
   req.session.accountData.account_firstname = firstname;
   req.session.accountData.account_lastname = lastname;
   req.session.accountData.account_email = email;
@@ -213,9 +178,6 @@ accountController.updateAccount = async (req, res) => {
   res.redirect("/account/manage");
 };
 
-/**************************************
- * LOGOUT
- **************************************/
 accountController.logout = (req, res) => {
   res.clearCookie("jwt");
   req.session.destroy(() => {

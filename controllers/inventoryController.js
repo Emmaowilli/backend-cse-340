@@ -1,13 +1,8 @@
-// controllers/inventoryController.js
-
 const invModel = require("../models/inventory-model");
 const utilities = require("../utilities");
 
 const invCont = {};
 
-/***************************************
- * MANAGEMENT VIEW
- ****************************************/
 invCont.buildManagement = async function (req, res) {
   try {
     const classifications = await invModel.getClassifications();
@@ -28,9 +23,6 @@ invCont.buildManagement = async function (req, res) {
   }
 };
 
-/***************************************
- * ADD CLASSIFICATION — SHOW FORM
- ****************************************/
 invCont.buildAddClassification = async function (req, res) {
   try {
     const classifications = await invModel.getClassifications();
@@ -52,9 +44,6 @@ invCont.buildAddClassification = async function (req, res) {
   }
 };
 
-/***************************************
- * ADD CLASSIFICATION — HANDLE POST
- ****************************************/
 invCont.addClassification = async function (req, res) {
   try {
     const classification_name = req.body?.classification_name?.trim() || "";
@@ -97,9 +86,6 @@ invCont.addClassification = async function (req, res) {
   }
 };
 
-/***************************************
- * ADD INVENTORY — SHOW FORM
- ****************************************/
 invCont.buildAddInventory = async function (req, res) {
   try {
     const classifications = await invModel.getClassifications();
@@ -122,9 +108,6 @@ invCont.buildAddInventory = async function (req, res) {
   }
 };
 
-/***************************************
- * ADD INVENTORY — HANDLE POST (FIXED)
- ****************************************/
 invCont.addInventory = async function (req, res) {
   try {
     const formData = req.body || {};
@@ -145,7 +128,6 @@ invCont.addInventory = async function (req, res) {
     const classifications = await invModel.getClassifications();
     const nav = utilities.getNav(classifications);
 
-    // Required fields
     if (
       !inv_make.trim() ||
       !inv_model.trim() ||
@@ -165,7 +147,7 @@ invCont.addInventory = async function (req, res) {
       });
     }
 
-    // Validate year
+ 
     if (!/^\d{4}$/.test(String(inv_year))) {
       return res.render("inventory/add-inventory", {
         title: "Add New Vehicle",
@@ -176,7 +158,6 @@ invCont.addInventory = async function (req, res) {
       });
     }
 
-    // Validate numbers
     if (isNaN(inv_price) || isNaN(inv_miles)) {
       return res.render("inventory/add-inventory", {
         title: "Add New Vehicle",
@@ -187,11 +168,9 @@ invCont.addInventory = async function (req, res) {
       });
     }
 
-    // Default images
     const finalImage = inv_image.trim() || "/images/vehicles/no-image.png";
     const finalThumbnail = inv_thumbnail.trim() || "/images/vehicles/no-image-tn.png";
 
-    // FIXED: Send individual values, not an object!
     const addResult = await invModel.addInventory(
       inv_make.trim(),
       inv_model.trim(),

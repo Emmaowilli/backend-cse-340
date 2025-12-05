@@ -27,10 +27,6 @@ const registrationRules = () => {
       .withMessage("Password must be at least 8 characters."),
   ]
 }
-
-/**************************************
- * CHECK REGISTRATION DATA
- **************************************/
 const checkRegData = async (req, res, next) => {
   const errors = validationResult(req)
 
@@ -47,10 +43,6 @@ const checkRegData = async (req, res, next) => {
   }
   next()
 }
-
-/**************************************
- * LOGIN RULES
- **************************************/
 const loginRules = () => {
   return [
     body("email")
@@ -64,10 +56,6 @@ const loginRules = () => {
       .withMessage("Password is required."),
   ]
 }
-
-/**************************************
- * CHECK LOGIN DATA
- **************************************/
 const checkLoginData = async (req, res, next) => {
   const errors = validationResult(req)
 
@@ -83,9 +71,6 @@ const checkLoginData = async (req, res, next) => {
   next()
 }
 
-/**************************************
- * UPDATE ACCOUNT RULES
- **************************************/
 const updateRules = () => {
   return [
     body("firstname")
@@ -105,9 +90,6 @@ const updateRules = () => {
   ]
 }
 
-/**************************************
- * CHECK UPDATE DATA
- **************************************/
 const checkUpdateData = async (req, res, next) => {
   const errors = validationResult(req)
 

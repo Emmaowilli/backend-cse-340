@@ -1,15 +1,9 @@
-/**********************************************
- * inventory-validation.js (FULLY FIXED)
- **********************************************/
 const { body, validationResult } = require("express-validator");
 const utilities = require("../utilities/");
 const invModel = require("../models/inventory-model");
 
 const validate = {};
 
-/* =====================================================
- * CLASSIFICATION RULES
- * ===================================================== */
 validate.classificationRules = () => {
   return [
     body("classification_name")
@@ -21,9 +15,6 @@ validate.classificationRules = () => {
   ];
 };
 
-/* =====================================================
- * CHECK CLASSIFICATION
- * ===================================================== */
 validate.checkClassification = async (req, res, next) => {
   const errors = validationResult(req);
   const nav = await utilities.getNav();
@@ -41,9 +32,6 @@ validate.checkClassification = async (req, res, next) => {
   next();
 };
 
-/* =====================================================
- * VEHICLE VALIDATION RULES
- * ===================================================== */
 validate.inventoryRules = () => {
   return [
     body("inv_make").trim().notEmpty().withMessage("Make is required."),

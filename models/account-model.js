@@ -1,10 +1,5 @@
-// models/account-model.js
-
 const pool = require("../database/");
 
-/**************************************
- * REGISTER ACCOUNT
- **************************************/
 async function registerAccount(firstname, lastname, email, password) {
   try {
     const sql = `
@@ -32,10 +27,6 @@ async function registerAccount(firstname, lastname, email, password) {
     return null;
   }
 }
-
-/**************************************
- * GET ACCOUNT BY EMAIL — REQUIRED FOR LOGIN
- **************************************/
 async function getAccountByEmail(email) {
   try {
     const sql = `
@@ -45,7 +36,7 @@ async function getAccountByEmail(email) {
 
     const result = await pool.query(sql, [email]);
 
-    return result.rows[0]; // returns undefined if no match
+    return result.rows[0];
 
   } catch (error) {
     console.error("getAccountByEmail error:", error);
@@ -53,9 +44,6 @@ async function getAccountByEmail(email) {
   }
 }
 
-/**************************************
- * EXPORT FUNCTIONS
- **************************************/
 module.exports = {
   registerAccount,
   getAccountByEmail,
