@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const staticRouter = require('./routes/static');
 const inventoryRouter = require('./routes/inventory');
 const accountRoute = require("./routes/accountRoute");
-const errorRouter = require('./routes/error');
+// Removed: const errorRouter = require('./routes/error');  ← This was the problem!
 
 const utilities = require('./utilities');
 const invModel = require('./models/inventory-model');
@@ -66,28 +66,36 @@ app.use(async (req, res, next) => {
 //              ROUTES
 // ======================================
 
-// STATIC FILES
+// STATIC FILES (CSS, JS, images, etc.)
 app.use('/', staticRouter);
 
 // INVENTORY ROUTES
 app.use('/inv', inventoryRouter);
 
-// ACCOUNT ROUTES (put BEFORE errorRouter)
+// ACCOUNT ROUTES
 app.use('/account', accountRoute);
 
-// HOME PAGE
+// HOME PAGE — This is your real homepage
 app.get('/', (req, res) => {
-  res.render('index', { title: 'Home', nav: res.locals.nav });
+  res.render('index', { 
+    title: 'Home',
+    nav: res.locals.nav 
+  });
 });
 
-// ERROR TEST ROUTE (Keep AFTER functional routes)
-app.use('/', errorRouter);
+// OPTIONAL: Keep the intentional error route ONLY on this safe path
+// (so you can still test 500 errors by visiting /cause-error manually)
+app.get('/cause-error', (req, res, next) => {
+  const err = new Error("Intentional 500 error for testing.");
+  err.status = 500;
+  next(err);
+});
 
 // ======================================
 //              ERROR HANDLING
 // ======================================
 
-// 404
+// 404 — Page not found
 app.use((req, res, next) => {
   next({ status: 404, message: 'Page not found' });
 });
@@ -102,7 +110,7 @@ app.use((err, req, res, next) => {
   res.status(status).render('errors/error', {
     title: status === 404 ? '404 - Not Found' : '500 - Server Error',
     message,
-    nav: res.locals.nav,
+    nav: res.locals.nav || [],  // fallback in case nav failed
   });
 });
 
