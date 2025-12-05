@@ -2,58 +2,54 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+// CRITICAL: Use environment variable with fallback (so it works locally AND on Render)
+const SECRET = process.env.ACCESS_TOKEN_SECRET || "superSecretKey123!@#";
 
 function getTokenFromCookies(req) {
-  // cookie name used by this project (adjust if different)
-  return req.cookies && req.cookies.token ? req.cookies.token : null;
+  // Your cookie is named "jwt" — NOT "token" (this was the main bug!)
+  return req.cookies?.jwt || null;
 }
 
-// middleware that tries to decode token and set res.locals.account if valid
-function checkAuth(req, res, next) {
+// Middleware: Check if user is logged in (used on every page)
+async function checkAuth(req, res, next) {
   const token = getTokenFromCookies(req);
+
   if (!token) {
-    // not logged in, simply continue (no account in locals)
+    res.locals.loggedin = false;
+    res.locals.accountData = null;
     return next();
   }
 
   try {
-    const payload = jwt.verify(token, ACCESS_TOKEN_SECRET);
-    // payload should contain account info (account_id, account_firstname, account_type, etc.)
-    res.locals.account = payload;
+    const payload = jwt.verify(token, SECRET);
+    res.locals.loggedin = true;
+    res.locals.accountData = payload; // contains account_id, firstname, type, etc.
   } catch (err) {
-    // invalid token: clear cookie and continue
-    res.clearCookie("token");
-    res.locals.account = null;
+    console.log("Invalid/expired JWT → clearing cookie");
+    res.clearCookie("jwt");
+    res.locals.loggedin = false;
+    res.locals.accountData = null;
   }
-  return next();
+  next();
 }
 
-// middleware that enforces employee/admin access
-function checkAdminOrEmployee(req, res, next) {
-  const token = getTokenFromCookies(req);
-  if (!token) {
-    req.flash("error", "Please login to access that page.");
+// Middleware: Protect /inv routes — only Employee or Admin
+function checkEmployeeOrAdmin(req, res, next) {
+  if (!res.locals.loggedin || !res.locals.accountData) {
+    req.flash("error", "Please log in to access this page.");
     return res.redirect("/account/login");
   }
 
-  try {
-    const payload = jwt.verify(token, ACCESS_TOKEN_SECRET);
-    if (payload.account_type && (payload.account_type === "Employee" || payload.account_type === "Admin")) {
-      res.locals.account = payload; // attach account info
-      return next();
-    } else {
-      req.flash("error", "You are not authorized to access that page.");
-      return res.redirect("/account/login");
-    }
-  } catch (err) {
-    res.clearCookie("token");
-    req.flash("error", "Session expired - please login again.");
-    return res.redirect("/account/login");
+  const type = res.locals.accountData.account_type;
+  if (type === "Employee" || type === "Admin") {
+    return next();
   }
+
+  req.flash("error", "Access denied. Employees and Admins only.");
+  res.redirect("/account");
 }
 
 module.exports = {
   checkAuth,
-  checkAdminOrEmployee,
+  checkEmployeeOrAdmin,
 };
