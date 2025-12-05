@@ -127,13 +127,14 @@
     <div class="vehicle-detail-container">
       <%- detailsHTML %>
 
-      <!-- FAVORITES SECTION - BEAUTIFUL & CLEAR -->
+      <!-- FAVORITES SECTION - FIXED & SAFE (NO MORE CRASH) -->
       <div class="favorite-section" style="width: 100%;">
         <% if (loggedin) { %>
           <form action="/account/favorite/add" method="post">
-            <input type="hidden" name="inv_id" value="<%= inv_id %>">
+            <!-- SAFE: Uses inv_id from URL parameters (always exists) -->
+            <input type="hidden" name="inv_id" value="<%= req.params.inv_id %>">
             <button type="submit" class="favorite-btn">
-              <span>Add to Favorites</span> Add to Favorites
+              Add to Favorites Add to Favorites
             </button>
           </form>
         <% } else { %>
@@ -148,4 +149,4 @@
 
   <%- include('../partials/footer') %>
 </body>
-</html>
+</html>l>
