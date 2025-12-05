@@ -1,49 +1,43 @@
 // database/index.js
 const { Pool } = require("pg");
 
-// Load .env locally
-if (!process.env.DATABASE_URL) {
-  require("dotenv").config();
-}
+// Always load .env (Render doesn't load it automatically)
+require("dotenv").config();
 
 /*
-  Detect local environment.
+  Decide which config to use:
+  - If DATABASE_URL exists → we're on Render → use it with SSL
+  - Otherwise → use individual PG_ variables (local dev)
 */
-const isLocal =
-  process.env.PG_HOST === "localhost" ||
-  process.env.PG_HOST === "127.0.0.1" ||
-  process.env.LOCAL === "true";
+const pool = new Pool({
+  // Priority 1: Render's DATABASE_URL (includes host, user, password, db, port)
+  connectionString: process.env.DATABASE_URL || undefined,
+  ssl: process.env.DATABASE_URL
+    ? { rejectUnauthorized: false }  // Required for Render
+    : false,                         // Local = no SSL
 
-// Local DB config (NO SSL)
-const localConfig = {
-  user: process.env.PG_USER,
-  host: process.env.PG_HOST,
-  database: process.env.PG_DATABASE,
-  password: String(process.env.PG_PASSWORD || ""), 
-  port: process.env.PG_PORT || 5432,
-};
-
-// Render/PostgreSQL config (WITH SSL)
-const renderConfig = {
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-};
-
-// Create pool
-const pool = new Pool(isLocal ? localConfig : renderConfig);
+  // Fallback for local development (only used if DATABASE_URL is missing)
+  ...(process.env.DATABASE_URL ? {} : {
+    user: process.env.PG_USER,
+    host: process.env.PG_HOST || "localhost",
+    database: process.env.PG_DATABASE,
+    password: process.env.PG_PASSWORD,
+    port: process.env.PG_PORT || 5432,
+  }),
+});
 
 // Query helper
 async function query(text, params) {
   try {
-    return await pool.query(text, params);
+    const start = Date.now();
+    const res = await pool.query(text, params);
+    const duration = Date.now() - start;
+    console.log("Query executed:", { text: text.substring(0, 50) + "...", duration, rows: res.rowCount });
+    return res;
   } catch (err) {
-    console.error("DB ERROR:", err);
+    console.error("DB ERROR:", err.message || err);
     throw err;
   }
 }
 
-// REQUIRED EXPORTS
-module.exports = {
-  pool,
-  query,
-};
+module.exports = { pool, query };
