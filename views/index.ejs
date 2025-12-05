@@ -7,9 +7,7 @@
       <%- include('partials/navigation') %>
 
       <main>
-        <h1>Welcome to CSE Motors!</h1>
-
-        <!-- HERO SECTION - SIDE BY SIDE -->
+        <!-- HERO SECTION WITH BUTTON IN THE MIDDLE -->
         <section class="hero">
           <div class="delorean-grid">
             <div class="delorean-text">
@@ -17,40 +15,46 @@
               <ul>
                 <li>3 Cup holders</li>
                 <li>Superman doors</li>
-                <li>Fuzzy dice!</li>
               </ul>
               <button class="cta-btn">
                 <img src="/images/site/own_today.png" alt="Own Today" class="btn-icon">
                 Own Today
               </button>
+
+              <!-- EXPLORE OUR FLEET BUTTON — PERFECT SPOT -->
+              <div style="margin-top: 2rem; text-align: center;">
+                <a href="/fleet" style="
+                  display: inline-block;
+                  background: #e91e63;
+                  color: white;
+                  padding: 1.2rem 2.5rem;
+                  border-radius: 50px;
+                  font-size: 1.4rem;
+                  font-weight: bold;
+                  text-decoration: none;
+                  box-shadow: 0 8px 25px rgba(233,30,99,0.4);
+                  transition: all 0.3s;
+                ">
+                  Explore Our Fleet
+                </a>
+              </div>
             </div>
+
             <div class="delorean-image">
               <img src="/images/vehicles/delorean.jpg" alt="DMC Delorean">
             </div>
           </div>
         </section>
 
-        <!-- UPGRADES + REVIEWS -->
+        <!-- UPGRADES + REVIEWS (UNCHANGED) -->
         <div class="bottom-grid">
           <section class="upgrades">
             <h2>Delorean Upgrades</h2>
             <div class="upgrade-grid">
-              <div>
-                <img src="/images/upgrades/flux-cap.png" alt="Flux Capacitor">
-                <p>Flux Capacitor</p>
-              </div>
-              <div>
-                <img src="/images/upgrades/flame.jpg" alt="Flame Decals">
-                <p>Flame Decals</p>
-              </div>
-              <div>
-                <img src="/images/upgrades/bumper_sticker.jpg" alt="Bumper Stickers">
-                <p>Bumper Stickers</p>
-              </div>
-              <div>
-                <img src="/images/upgrades/hub-cap.jpg" alt="Hub Caps">
-                <p>Hub Caps</p>
-              </div>
+              <div><img src="/images/upgrades/flux-cap.png" alt="Flux Capacitor"><p>Flux Capacitor</p></div>
+              <div><img src="/images/upgrades/flame.jpg" alt="Flame Decals"><p>Flame Decars</p></div>
+              <div><img src="/images/upgrades/bumper_sticker.jpg" alt="Bumper Stickers"><p>Bumper Stickers</p></div>
+              <div><img src="/images/upgrades/hub-cap.jpg" alt="Hub Caps"><p>Hub Caps</p></div>
             </div>
           </section>
 
@@ -65,33 +69,6 @@
             </ul>
           </section>
         </div>
-
-        <!-- VEHICLE SHOWCASE -->
-        <section class="vehicle-showcase">
-          <h2>Explore Our Fleet</h2>
-          <div class="vehicle-grid">
-            <% 
-              const vehicles = [
-                'adventador-tn.jpg', 'adventador.jpg', 'aerocar-tn.jpg', 'aerocar.jpg',
-                'batmobile-tn.jpg', 'batmobile.jpg', 'ford-mustang-tn.jpg', 'ford-mustang.jpg',
-                'crwn-vic-tn.jpg', 'crwn-vic.jpg', 'delorean-tn.jpg', 'delorean.jpg',
-                'dog-car-tn.jpg', 'dog-car.jpg', 'escalade-tn.jpg', 'escalade.jpg',
-                'fire-truck-tn.jpg', 'fire-truck.jpg', 'hummer-tn.jpg', 'hummer.jpg',
-                'mechanic-tn.jpg', 'mechanic.jpg', 'model-t-tn.jpg', 'model-t.jpg',
-                'monster-truck-tn.jpg', 'monster-truck.jpg', 'mystery-van-tn.jpg',
-                'mystery-van.jpg', 'no-image-tn.png', 'no-image.png',
-                'survan-tn.jpg', 'survan.jpg', 'jeep-wrangler-tn.jpg', 'jeep-wrangler.jpg'
-              ];
-              vehicles.forEach(img => { 
-                const name = img.split('.')[0].split('-tn')[0].replace(/-/g, ' ').toUpperCase();
-            %>
-              <div class="vehicle-card">
-                <img src="/images/vehicles/<%= img %>" alt="<%= name %>">
-                <p><%= name %></p>
-              </div>
-            <% }) %>
-          </div>
-        </section>
       </main>
 
       <%- include('partials/footer') %>

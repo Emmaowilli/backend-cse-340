@@ -1,16 +1,11 @@
-// utilities/auth.js
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
-// CRITICAL: Use environment variable with fallback (so it works locally AND on Render)
 const SECRET = process.env.ACCESS_TOKEN_SECRET || "superSecretKey123!@#";
 
 function getTokenFromCookies(req) {
-  // Your cookie is named "jwt" — NOT "token" (this was the main bug!)
+ 
   return req.cookies?.jwt || null;
 }
-
-// Middleware: Check if user is logged in (used on every page)
 async function checkAuth(req, res, next) {
   const token = getTokenFromCookies(req);
 
@@ -23,7 +18,7 @@ async function checkAuth(req, res, next) {
   try {
     const payload = jwt.verify(token, SECRET);
     res.locals.loggedin = true;
-    res.locals.accountData = payload; // contains account_id, firstname, type, etc.
+    res.locals.accountData = payload; 
   } catch (err) {
     console.log("Invalid/expired JWT → clearing cookie");
     res.clearCookie("jwt");

@@ -1,4 +1,3 @@
-// controllers/errorController.js
 const errorCont = {};
 
 errorCont.triggerError = function (req, res, next) {

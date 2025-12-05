@@ -46,12 +46,20 @@ app.use(async (req, res, next) => {
 });
 app.use('/', staticRouter);
 app.use('/inv', inventoryRouter);
-
 app.use('/account', accountRoute);
 
+// === YOUR ORIGINAL HOME ROUTE ===
 app.get('/', (req, res) => {
   res.render('index', { 
     title: 'Home',
+    nav: res.locals.nav 
+  });
+});
+
+// === NEW: EXPLORE OUR FLEET PAGE (ADDED HERE) ===
+app.get('/fleet', (req, res) => {
+  res.render('fleet', { 
+    title: 'Explore Our Fleet',
     nav: res.locals.nav 
   });
 });

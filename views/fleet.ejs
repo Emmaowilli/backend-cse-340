@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <div id="wrapper">
+      <%- include('partials/header') %>
+      <%- include('partials/navigation') %>
+
+      <main style="padding: 3rem 1rem; background: #f8f9fa;">
+        <h1 style="text-align: center; font-size: 3rem; margin-bottom: 2rem; color: #1a1a1a;">
+          Explore Our Fleet
+        </h1>
+
+        <div class="vehicle-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; max-width: 1400px; margin: 0 auto;">
+          <% 
+            const vehicles = [
+              'adventador-tn.jpg', 'aerocar-tn.jpg', 'batmobile-tn.jpg', 'ford-mustang-tn.jpg',
+              'crwn-vic-tn.jpg', 'delorean-tn.jpg', 'dog-car-tn.jpg', 'escalade-tn.jpg',
+              'fire-truck-tn.jpg', 'hummer-tn.jpg', 'mechanic-tn.jpg', 'model-t-tn.jpg',
+              'monster-truck-tn.jpg', 'mystery-van-tn.jpg', 'survan-tn.jpg', 'jeep-wrangler-tn.jpg'
+            ];
+            vehicles.forEach(img => { 
+              const name = img.split('-tn')[0].replace(/-/g, ' ').toUpperCase();
+          %>
+            <div class="vehicle-card" style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s;">
+              <a href="/inv">
+                <img src="/images/vehicles/<%= img %>" alt="<%= name %>" style="width: 100%; height: 200px; object-fit: cover;">
+                <div style="padding: 1rem; text-align: center;">
+                  <p style="margin: 0; font-weight: bold; color: #333;"><%= name %></p>
+                </div>
+              </a>
+            </div>
+          <% }) %>
+        </div>
+      </main>
+
+      <%- include('partials/footer') %>
+    </div>
+  </body>
+</html>

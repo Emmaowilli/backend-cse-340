@@ -1,0 +1,24 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+
+<div class="container">
+  <h1>My Favorite Vehicles</h1>
+  <%- messages() %>
+
+  <% if (favorites.length === 0) { %>
+    <p>You haven't added any favorites yet. <a href="/inv">Browse vehicles</a></p>
+  <% } else { %>
+    <div class="grid">
+      <% favorites.forEach(vehicle => { %>
+        <div class="card">
+          <img src="<%= vehicle.inv_thumbnail %>" alt="<%= vehicle.inv_make %> <%= vehicle.inv_model %>">
+          <h3><%= vehicle.inv_make %> <%= vehicle.inv_model %></h3>
+          <p>$<%= vehicle.inv_price.toLocaleString() %></p>
+          <a href="/inv/detail/<%= vehicle.inv_id %>">View Details</a>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

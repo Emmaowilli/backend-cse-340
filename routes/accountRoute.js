@@ -1,10 +1,9 @@
-// routes/accountRoute.js
 const express = require("express");
 const router = express.Router();
 const accountController = require("../controllers/accountController");
 const validation = require("../utilities/account-validation");
 
-// Login
+// ========== YOUR EXISTING ROUTES (UNCHANGED) ==========
 router.get("/login", accountController.buildLogin);
 router.post(
   "/login",
@@ -13,7 +12,6 @@ router.post(
   accountController.loginAccount
 );
 
-// Register
 router.get("/register", accountController.buildRegister);
 router.post(
   "/register",
@@ -22,13 +20,10 @@ router.post(
   accountController.registerAccount
 );
 
-// Account management
 router.get("/manage", accountController.buildAccountManagement);
 
-// Edit account info page
 router.get("/update", accountController.buildUpdateAccount);
 
-// Process update
 router.post(
   "/update",
   validation.updateRules(),
@@ -36,8 +31,19 @@ router.post(
   accountController.updateAccount
 );
 
-// Logout
 router.get("/logout", accountController.logout);
+
+// ========== NEW FAVORITES ROUTES (ADDED BELOW) ==========
+const favoriteController = require("../controllers/favoriteController");
+
+// Add to favorites
+router.post("/favorite/add", favoriteController.addToFavorites);
+
+// Remove from favorites (from detail page or list)
+router.post("/favorite/remove/:inv_id", favoriteController.removeFromFavorites);
+
+// View all favorites
+router.get("/favorites", favoriteController.viewFavorites);
 
 module.exports = router;
 
