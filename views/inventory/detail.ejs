@@ -128,15 +128,21 @@
       <%- detailsHTML %>
 
       <!-- FAVORITES SECTION - FIXED & SAFE (NO MORE CRASH) -->
+            <!-- FAVORITES SECTION - BULLETPROOF FIX (NO CRASH EVER) -->
       <div class="favorite-section" style="width: 100%;">
         <% if (loggedin) { %>
           <form action="/account/favorite/add" method="post">
-            <!-- SAFE: Uses inv_id from URL parameters (always exists) -->
-            <input type="hidden" name="inv_id" value="<%= req.params.inv_id %>">
+            <!-- Extract inv_id from the current URL using JavaScript (100% safe) -->
+            <input type="hidden" name="inv_id" value="" id="inv_id_input">
             <button type="submit" class="favorite-btn">
               Add to Favorites Add to Favorites
             </button>
           </form>
+          <script>
+            // Safely get inv_id from URL like /inv/detail/5 → 5
+            const match = window.location.pathname.match(/\/detail\/(\d+)/);
+            if (match) document.getElementById('inv_id_input').value = match[1];
+          </script>
         <% } else { %>
           <div class="login-prompt">
             <strong>Want to save this beauty?</strong><br>
