@@ -1,41 +1,68 @@
-<%- include("../partials/head", { title: "Register" }) %>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | CSE Motors</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    body { background: #f8f9fa !important; background-image: none !important; }
+    .container {
+      max-width: 420px; margin: 4rem auto; padding: 3rem;
+      background: white; border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+    h1 { margin-bottom: 2rem; }
+    input, select { width: 100%; padding: 1rem; margin: 0.8rem 0; border: 2px solid #ddd; border-radius: 8px; }
+    button {
+      background: #1976d2; color: white; padding: 1rem 2.5rem; font-size: 1.3rem; border: none; border-radius: 50px;
+      cursor: pointer; margin-top: 1rem; font-weight: bold;
+    }
+    .error { color: #d32f2f; background: #ffebee; padding: 1rem; border-radius: 8px; margin: 1rem 0; }
+  </style>
+</head>
 <body>
-  <div id="wrapper">
-    <%- include("../partials/header") %>
-    <%- include("../partials/navigation", { nav }) %>
+  <%- include('../partials/header') %>
+  <%- include('../partials/navigation') %>
 
-    <main>
-      <h1>Register</h1>
+  <main>
+    <div class="container">
+      <h1>Register New Account</h1>
 
-      <% if (errors && errors.length) { %>
-        <ul class="errors">
-          <% errors.forEach(function(err){ %>
-            <li><%= err.msg %></li>
-          <% }); %>
-        </ul>
+      <% if (locals.error) { %>
+        <div class="error"><%= locals.error %></div>
       <% } %>
-      
-      <form action="/account/register" method="post" novalidate>
-        <label for="firstname">First Name</label>
-        <input id="firstname" name="firstname" type="text" required value="<%= firstname || '' %>">
 
-        <label for="lastname">Last Name</label>
-        <input id="lastname" name="lastname" type="text" required value="<%= lastname || '' %>">
-
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" required value="<%= email || '' %>">
-
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" required>
-
-        <button type="submit">Register</button>
+      <form action="/account/register" method="post">
+        <p>
+          <input type="text" name="account_firstname" required placeholder="First Name" value="<%= locals.account_firstname || '' %>">
+        </p>
+        <p>
+          <input type="text" name="account_lastname" required placeholder="Last Name" value="<%= locals.account_lastname || '' %>">
+        </p>
+        <p>
+          <input type="email" name="account_email" required placeholder="Email" value="<%= locals.account_email || '' %>">
+        </p>
+        <p>
+          <input type="password" name="account_password" required placeholder="Password">
+        </p>
+        <p>
+          <select name="account_type" required>
+            <option value="Client" <%= locals.account_type === 'Client' ? 'selected' : '' %>>Client</option>
+            <option value="Employee" <%= locals.account_type === 'Employee' ? 'selected' : '' %>>Employee</option>
+            <option value="Admin" <%= locals.account_type === 'Admin' ? 'selected' : '' %>>Admin</option>
+          </select>
+        </p>
+        <p>
+          <button type="submit">Register</button>
+        </p>
       </form>
-    </main>
+    </div>
+  </main>
 
-    <%- include("../partials/footer") %>
-  </div>
+  <%- include('../partials/footer') %>
 </body>
+</html>
 
 
 

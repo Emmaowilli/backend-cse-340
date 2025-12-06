@@ -6,75 +6,76 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="/css/styles.css" />
   <style>
-    /* === REMOVE UGLY CHECKERBOARD & MAKE CLEAN BACKGROUND === */
-    body, #main-content {
-      background: #f8f9fa !important;
-      background-image: none !important;
-    }
+    body, #main-content { background: #f8f9fa !important; background-image: none !important; }
 
-    /* === VEHICLE DETAIL - CLEAN & MODERN LAYOUT === */
-    .vehicle-detail-container {
+    .detail-wrapper {
       max-width: 1200px;
       margin: 2rem auto;
       padding: 2rem;
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
       display: flex;
       gap: 3rem;
       flex-wrap: wrap;
-      align-items: flex-start;
     }
 
-    .vehicle-image {
-      flex: 1 1 500px;
+    .detail-image {
+      flex: 1;
+      min-width: 300px;
       text-align: center;
     }
-    .vehicle-image img {
+    .detail-image img {
       width: 100%;
-      max-width: 700px;
-      height: auto;
+      max-width: 600px;
       border-radius: 12px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
-    .vehicle-info {
-      flex: 1 1 400px;
+    .detail-info {
+      flex: 2;
+      min-width: 300px;
       font-size: 1.1rem;
-      line-height: 1.7;
+      line-height: 1.8;
     }
 
-    .vehicle-title {
-      font-size: 2.4rem;
+    .detail-info h1 {
+      font-size: 2.8rem;
       margin: 0 0 0.5rem;
       color: #1a1a1a;
     }
 
     .price {
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: #d32f2f;
       font-weight: bold;
+      margin: 0.5rem 0;
     }
 
-    .details-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin: 1.5rem 0;
-      background: #f5f5f5;
+    .description {
+      background: #f0f0f0;
       padding: 1.5rem;
-      border-radius: 8px;
-    }
-
-    .details-grid strong { color: #333; }
-
-    /* === FAVORITE BUTTON - BEAUTIFUL & VISIBLE === */
-    .favorite-section {
-      margin-top: 2rem;
-      padding: 1.5rem;
-      background: #fff8f8;
-      border: 2px solid #ffcdd2;
       border-radius: 12px;
+      margin: 1.5rem 0;
+      font-size: 1.15rem;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+
+    .favorite-box {
+      margin-top: 2rem;
+      padding: 2rem;
+      background: linear-gradient(135deg, #ffebee, #fff3e0);
+      border: 3px solid #e91e63;
+      border-radius: 16px;
       text-align: center;
     }
 
@@ -82,41 +83,24 @@
       background: #e91e63;
       color: white;
       border: none;
-      padding: 1rem 2rem;
-      font-size: 1.3rem;
+      padding: 1.2rem 3rem;
+      font-size: 1.5rem;
       border-radius: 50px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.8rem;
-      box-shadow: 0 4px 15px rgba(233,30,99,0.3);
-      transition: all 0.3s;
+      font-weight: bold;
+      box-shadow: 0 8px 25px rgba(233,30,99,0.4);
     }
-    .favorite-btn:hover {
-      background: #c2185b;
-      transform: translateY(-2px);
-    }
-    .favorite-btn span { font-size: 2rem; }
 
     .login-prompt {
       margin-top: 1.5rem;
-      padding: 1.5rem;
+      padding: 2rem;
       background: #e3f2fd;
-      border: 2px solid #bbdefb;
-      border-radius: 12px;
-      font-size: 1.2rem;
+      border: 3px solid #1976d2;
+      border-radius: 16px;
+      font-size: 1.3rem;
       color: #1565c0;
     }
-    .login-prompt a {
-      color: #1976d2;
-      font-weight: bold;
-      text-decoration: underline;
-    }
-
-    @media (max-width: 768px) {
-      .vehicle-detail-container { padding: 1rem; gap: 2rem; }
-      .vehicle-title { font-size: 2rem; }
-    }
+    .login-prompt a { color: #1976d2; font-weight: bold; text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -124,35 +108,30 @@
   <%- include('../partials/navigation') %>
 
   <main id="main-content">
-    <div class="vehicle-detail-container">
+    <div class="detail-wrapper">
       <%- detailsHTML %>
 
-      <!-- FAVORITES SECTION - FIXED & SAFE (NO MORE CRASH) -->
-            <!-- FAVORITES SECTION - BULLETPROOF FIX (NO CRASH EVER) -->
-      <div class="favorite-section" style="width: 100%;">
-        <% if (loggedin) { %>
-          <form action="/account/favorite/add" method="post">
-            <!-- Extract inv_id from the current URL using JavaScript (100% safe) -->
-            <input type="hidden" name="inv_id" value="" id="inv_id_input">
-            <button type="submit" class="favorite-btn">
-              Add to Favorites Add to Favorites
-            </button>
-          </form>
-          <script>
-            // Safely get inv_id from URL like /inv/detail/5 → 5
-            const match = window.location.pathname.match(/\/detail\/(\d+)/);
-            if (match) document.getElementById('inv_id_input').value = match[1];
-          </script>
-        <% } else { %>
-          <div class="login-prompt">
-            <strong>Want to save this beauty?</strong><br>
-            <a href="/account/login">Log in</a> or <a href="/account/register">Register</a> to add vehicles to your favorites!
-          </div>
-        <% } %>
+      <div class="detail-info">
+        <!-- FAVORITES — BIG AND OBVIOUS -->
+        <div class="favorite-box">
+          <% if (loggedin) { %>
+            <form action="/account/favorite/add" method="post">
+              <input type="hidden" name="inv_id" value="<%= req.params.inv_id %>">
+              <button type="submit" class="favorite-btn">
+                Add to Favorites Add to My Favorites
+              </button>
+            </form>
+          <% } else { %>
+            <div class="login-prompt">
+              <strong>Want to save this vehicle?</strong><br><br>
+              <a href="/account/login">Log in</a> or <a href="/account/register">Register</a> to add to your favorites!
+            </div>
+          <% } %>
+        </div>
       </div>
     </div>
   </main>
 
   <%- include('../partials/footer') %>
 </body>
-</html>l>
+</html>
